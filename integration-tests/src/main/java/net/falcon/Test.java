@@ -1,5 +1,6 @@
 package net.falcon;
 
+import net.falcon.factorybean.CustomerFactoryBean;
 import net.falcon.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,5 +13,8 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("net.falcon.*");
 		UserService userService = context.getBean(UserService.class);
 		System.out.println(userService.test());
+		CustomerFactoryBean customerFactoryBean = context.getBean(CustomerFactoryBean.class);
+		System.out.println(customerFactoryBean);
+
 	}
 }
