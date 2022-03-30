@@ -38,7 +38,7 @@ import org.springframework.lang.Nullable;
  */
 public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry {
 
-	/** Cache of singleton objects created by FactoryBeans: FactoryBean name to object. */
+	/** FactoryBeans 创建的单例对象的缓存：FactoryBean 名称到对象。 */
 	private final Map<String, Object> factoryBeanObjectCache = new ConcurrentHashMap<>(16);
 
 
@@ -62,11 +62,9 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	}
 
 	/**
-	 * Obtain an object to expose from the given FactoryBean, if available
-	 * in cached form. Quick check for minimal synchronization.
-	 * @param beanName the name of the bean
-	 * @return the object obtained from the FactoryBean,
-	 * or {@code null} if not available
+	 * 从给定的 FactoryBean 中获取要公开的对象（如果以缓存形式存在）。快速检查最小同步。
+	 * @param beanName 对象名称
+	 * @return 从 FactoryBean 获得的对象，如果不可用，则为 {@code null}
 	 */
 	@Nullable
 	protected Object getCachedObjectForFactoryBean(String beanName) {
