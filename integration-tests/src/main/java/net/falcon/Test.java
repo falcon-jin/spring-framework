@@ -2,19 +2,28 @@ package net.falcon;
 
 import net.falcon.factorybean.CustomerFactoryBean;
 import net.falcon.service.UserService;
+import net.falcon.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.swing.*;
+import java.util.Objects;
 
 public class Test {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("net.falcon.*");
-		UserService userService = context.getBean(UserService.class);
-		System.out.println(userService.test());
-		CustomerFactoryBean customerFactoryBean = context.getBean(CustomerFactoryBean.class);
-		System.out.println(customerFactoryBean);
+		Object userService = context.getBean("userServiceImpl");
+
+			if (userService instanceof UserService registry) {
+				System.out.println(registry);
+
+
+			}
+
+
+
 
 	}
 }

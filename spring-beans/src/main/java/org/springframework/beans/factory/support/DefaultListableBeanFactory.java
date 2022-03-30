@@ -527,6 +527,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
+		//doGetBeanNamesForType 方法开始实例化对象
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
 			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
 		}
@@ -543,6 +544,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return resolvedBeanNames;
 	}
 
+	/**
+	 *
+	 * @param type
+	 * @param includeNonSingletons
+	 * @param allowEagerInit 是否允许提前初始化 (放在二级缓冲解决循环依赖问题)
+	 * @return
+	 */
 	private String[] doGetBeanNamesForType(ResolvableType type, boolean includeNonSingletons, boolean allowEagerInit) {
 		List<String> result = new ArrayList<>();
 
@@ -569,11 +577,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						else {
 							if (includeNonSingletons || isNonLazyDecorated ||
 									(allowFactoryBeanInit && isSingleton(beanName, mbd, dbd))) {
+								//检查给定名称的 bean 是否与指定类型匹配。允许应用额外的约束以确保不会提前创建 bean。
 								matchFound = isTypeMatch(beanName, type, allowFactoryBeanInit);
 							}
 							if (!matchFound) {
 								// 如果是 FactoryBean，接下来尝试匹配 FactoryBean 实例本身。
 								beanName = FACTORY_BEAN_PREFIX + beanName;
+								//检查给定名称的 bean 是否与指定类型匹配。允许应用额外的约束以确保不会提前创建 bean。
 								matchFound = isTypeMatch(beanName, type, allowFactoryBeanInit);
 							}
 						}

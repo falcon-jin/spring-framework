@@ -499,9 +499,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Internal extended variant of {@link #isTypeMatch(String, ResolvableType)}
-	 * to check whether the bean with the given name matches the specified type. Allow
-	 * additional constraints to be applied to ensure that beans are not created early.
+	 * {@link isTypeMatch(String, ResolvableType)} 的内部扩展变体，用于检查给定名称的 bean 是否与指定类型匹配。允许应用额外的约束以确保不会提前创建 bean。
 	 * @param name the name of the bean to query
 	 * @param typeToMatch the type to match against (as a
 	 * {@code ResolvableType})
@@ -609,7 +607,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 尝试获取 bean 的实际 ResolvableType。
 		ResolvableType beanType = null;
 
-		// 如果它是一个 FactoryBean，我们想看看它创建了什么，而不是工厂类。
+		// 如果它是一个 FactoryBean，我们想看看它创建了什么，而不是只创建工厂类。
 		if (FactoryBean.class.isAssignableFrom(predictedType)) {
 			if (beanInstance == null && !isFactoryDereference) {
 				beanType = getTypeForFactoryBean(beanName, mbd, allowFactoryBeanInit);

@@ -564,7 +564,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 调用在上下文中注册为 bean 的工厂处理器。 这里开始实例化对象
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// 注册拦截 bean 创建的 bean 处理器。
+				// 注册bean后置增强器
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
@@ -580,7 +580,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				//检查侦听器 bean 并注册它们。
 				registerListeners();
 
-				// Instantiate all remaining (non-lazy-init) singletons.
+				//实例化所有剩余的（非惰性初始化）单例。
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -887,8 +887,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Finish the initialization of this context's bean factory,
-	 * initializing all remaining singleton beans.
+	 *完成此上下文的 bean 工厂的初始化，初始化所有剩余的单例 bean。
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
