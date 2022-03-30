@@ -226,14 +226,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Return an instance, which may be shared or independent, of the specified bean.
-	 * @param name the name of the bean to retrieve
-	 * @param requiredType the required type of the bean to retrieve
-	 * @param args arguments to use when creating a bean instance using explicit arguments
-	 * (only applied when creating a new instance as opposed to retrieving an existing one)
-	 * @param typeCheckOnly whether the instance is obtained for a type check,
-	 * not for actual use
-	 * @return an instance of the bean
+	 * 返回指定 bean 的一个实例，该实例可以是共享的，也可以是独立的。
+	 * @param name 要检索的 bean 的名称
+	 * @param requiredType 要检索的 bean 的所需类型
+	 * @param args 使用显式参数创建 bean 实例时使用的参数（仅在创建新实例而不是检索现有实例时应用）
+	 * @param typeCheckOnly 是否为类型检查获取实例，不用于实际使用
+	 * @return bean 的一个实例
 	 * @throws BeansException if the bean could not be created
 	 */
 	@SuppressWarnings("unchecked")
@@ -244,7 +242,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		String beanName = transformedBeanName(name);
 		Object beanInstance;
 
-		// Eagerly check singleton cache for manually registered singletons.
+		// 从一级缓冲取 一级缓冲存放的是已经实例化结束的对象
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -256,6 +254,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			//一级缓冲没有 从
 			beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -1758,10 +1757,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Get the object for the given bean instance, either the bean
-	 * instance itself or its created object in case of a FactoryBean.
-	 * @param beanInstance the shared bean instance
-	 * @param name the name that may include factory dereference prefix
+	 * 获取给定 bean 实例的对象，bean 实例本身或其创建的对象（如果是 FactoryBean）。
+	 * @param beanInstance 共享 bean 实例
+	 * @param name 可能包含工厂取消引用前缀的名称
 	 * @param beanName the canonical bean name
 	 * @param mbd the merged bean definition
 	 * @return the object to expose for the bean

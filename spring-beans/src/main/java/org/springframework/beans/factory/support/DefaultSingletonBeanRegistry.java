@@ -74,23 +74,37 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private static final int SUPPRESSED_EXCEPTIONS_LIMIT = 100;
 
 
-	/** Cache of singleton objects: bean name to bean instance. */
+	/** 单例对象的缓存：bean 名称到 bean 实例。 http://www.codebaoku.com/it-java/it-java-236898.html
+	 *  一级缓存-singletonObjects是用来存放就绪状态的Bean
+	 *  保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，
+	 *  也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理；
+	 */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
-	/** Cache of singleton factories: bean name to ObjectFactory. */
-	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
-
-	/** Cache of early singleton objects: bean name to bean instance. */
+	/** 早期单例对象的缓存：bean 名称到 bean 实例。 主要解决循环引用
+	 * 二级缓存-earlySingletonObjects是用来存放早期曝光的Bean，一般只有处于循环引用状态的Bean才会被保存在该缓存中。
+	 * 保存在该缓存中的Bean所实现Aware子接口的方法还未回调，自定义初始化方法未执行，
+	 * 也未经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。
+	 * 如果启用了Spring AOP，并且处于切点表达式处理范围之内，那么会被增强，即创建其代理对象。
+	 * 这里额外提一点，普通Bean被增强(JDK动态代理或CGLIB)的时机是在AbstractAutoProxyCreator实现的BeanPostProcessor的postProcessorAfterInitialization方法中
+	 * ，而处于循环引用状态的Bean被增强的时机是在AbstractAutoProxyCreator实现的SmartInstantiationAwareBeanPostProcessor的getEarlyBeanReference方法中。
+	 */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
-	/** Set of registered singletons, containing the bean names in registration order. */
+	/** 单例工厂的缓存：对象工厂的 bean 名称。
+	 * 三级缓存-singletonFactories是用来存放创建用于获取Bean的工厂类-ObjectFactory实例。
+	 * 在IoC容器中，所有刚被创建出来的Bean，默认都会保存到该缓存中。
+	 */
+	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
+
+	/** 一组已注册的单例，包含按注册顺序排列的 bean 名称。 */
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
 
-	/** Names of beans that are currently in creation. */
+	/** 当前正在创建的 bean 的名称。 */
 	private final Set<String> singletonsCurrentlyInCreation =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
-	/** Names of beans currently excluded from in creation checks. */
+	/** 当前从创建检查中排除的 bean 的名称。 */
 	private final Set<String> inCreationCheckExclusions =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
@@ -169,16 +183,14 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Return the (raw) singleton object registered under the given name.
-	 * <p>Checks already instantiated singletons and also allows for an early
-	 * reference to a currently created singleton (resolving a circular reference).
-	 * @param beanName the name of the bean to look for
-	 * @param allowEarlyReference whether early references should be created or not
-	 * @return the registered singleton object, or {@code null} if none found
+	 * 返回在给定名称下注册的（原始）单例对象。 <p>检查已经实例化的单例，并允许提前引用当前创建的单例（解决循环引用）。
+	 * @param beanName 要查找的 bean 的名称
+	 * @param allowEarlyReference 是否应创建早期引用
+	 * @return 注册的单例对象，如果没有找到则为 {@code null}
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		// Quick check for existing instance without full singleton lock
+		// 快速检查没有完整单例锁的现有实例
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			singletonObject = this.earlySingletonObjects.get(beanName);
@@ -336,9 +348,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	/**
-	 * Return whether the specified singleton bean is currently in creation
-	 * (within the entire factory).
-	 * @param beanName the name of the bean
+	 * 返回指定的单例 bean 当前是否正在创建中（在整个工厂中）。
+	 * @param beanName 对象名称
 	 */
 	public boolean isSingletonCurrentlyInCreation(String beanName) {
 		return this.singletonsCurrentlyInCreation.contains(beanName);

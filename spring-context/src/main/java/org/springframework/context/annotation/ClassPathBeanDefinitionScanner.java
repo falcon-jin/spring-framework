@@ -244,13 +244,14 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 
 	/**
-	 * Perform a scan within the specified base packages.
+	 * 在指定的基本包中执行扫描。
 	 * @param basePackages the packages to check for annotated classes
-	 * @return number of beans registered
+	 * @return 注册的 bean 数量
 	 */
 	public int scan(String... basePackages) {
 		int beanCountAtScanStart = this.registry.getBeanDefinitionCount();
 
+		//执行扫描操作
 		doScan(basePackages);
 
 		// Register annotation config processors, if necessary.
@@ -262,10 +263,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	}
 
 	/**
-	 * Perform a scan within the specified base packages,
-	 * returning the registered bean definitions.
-	 * <p>This method does <i>not</i> register an annotation config processor
-	 * but rather leaves this up to the caller.
+	 * 在指定的基本包中执行扫描，返回注册的 bean 定义。 <p>这个方法<i>不<i>注册一个注解配置处理器，而是把它留给调用者。
 	 * @param basePackages the packages to check for annotated classes
 	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
 	 */
@@ -289,16 +287,16 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					//注册bean定义信息
 					registerBeanDefinition(definitionHolder, this.registry);
-				}
+              	}
 			}
 		}
 		return beanDefinitions;
 	}
 
 	/**
-	 * Apply further settings to the given bean definition,
-	 * beyond the contents retrieved from scanning the component class.
+	 * 除了通过扫描组件类检索到的内容之外，将进一步的设置应用于给定的 bean 定义。
 	 * @param beanDefinition the scanned bean definition
 	 * @param beanName the generated bean name for the given bean
 	 */
@@ -310,9 +308,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	}
 
 	/**
-	 * Register the specified bean with the given registry.
-	 * <p>Can be overridden in subclasses, e.g. to adapt the registration
-	 * process or to register further bean definitions for each scanned bean.
+	 * 使用给定的注册表注册指定的 bean。 <p>可以在子类中被覆盖，例如调整注册过程或为每个扫描的 bean 注册更多的 bean 定义。
 	 * @param definitionHolder the bean definition plus bean name for the bean
 	 * @param registry the BeanDefinitionRegistry to register the bean with
 	 */

@@ -94,13 +94,12 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	}
 
 	/**
-	 * Create a new AnnotationConfigApplicationContext, scanning for components
-	 * in the given packages, registering bean definitions for those components,
-	 * and automatically refreshing the context.
+	 * 创建一个新的 AnnotationConfigApplicationContext，扫描给定包中的组件，为这些组件注册 bean 定义，并自动刷新上下文。
 	 * @param basePackages the packages to scan for component classes
 	 */
 	public AnnotationConfigApplicationContext(String... basePackages) {
 		this();
+		//扫扫描路径下的bean定义信息
 		scan(basePackages);
 		refresh();
 	}
@@ -170,9 +169,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	}
 
 	/**
-	 * Perform a scan within the specified base packages.
-	 * <p>Note that {@link #refresh()} must be called in order for the context
-	 * to fully process the new classes.
+	 * 在指定的基本包中执行扫描。 <p>请注意，必须调用 {@link refresh()} 才能使上下文完全处理新类。
 	 * @param basePackages the packages to scan for component classes
 	 * @see #register(Class...)
 	 * @see #refresh()
@@ -182,6 +179,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		StartupStep scanPackages = this.getApplicationStartup().start("spring.context.base-packages.scan")
 				.tag("packages", () -> Arrays.toString(basePackages));
+		//执行扫描
 		this.scanner.scan(basePackages);
 		scanPackages.end();
 	}
