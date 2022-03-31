@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Test {
 
 	public static void main(String[] args) {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("net.falcon.*");
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestApplication.class);
 		Object userService = context.getBean("userServiceImpl");
 
 			if (userService instanceof UserService registry) {
