@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImplA implements UserServiceA {
 	@Autowired
-	private UserServiceA userServiceA;
+	private UserService userService;
 	@Override
 	public String test() {
-		System.out.println("UserService"+userServiceA.toString());
+		System.out.println("UserServiceA"+userService.toString());
 		return null;
 	}
 }

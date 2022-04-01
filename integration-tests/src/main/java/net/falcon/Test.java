@@ -16,6 +16,7 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestApplication.class);
 		Object userService = context.getBean("userServiceImpl");
 
+
 			if (userService instanceof UserService registry) {
 				System.out.println(registry);
 
